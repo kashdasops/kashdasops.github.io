@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>漫画星球-漫画星球：漫画爱好者的互动社区与阅读指南</title>
+  <meta name="description" content="漫画星球是集漫画推荐、深度解读、创作交流于一体的中文漫画社区。了解星球机制、发现优质漫画、参与同好讨论，开启你的漫画星球之旅。">
+  <meta name="keywords" content="漫画星球,漫画推荐,漫画社区,漫画解读,漫画交流,星球阅读指南,漫画星球导航">
+  <style>
+    /* ==== 全局与设计变量 ==== */
+    :root {
+      --primary: #6C4AB6;
+      --primary-deep: #4A2C8A;
+      --secondary: #FF8C69;
+      --accent: #3BC9DB;
+      --bg-space: #0F0C1F;
+      --surface: #1A1630;
+      --surface-light: #241E3E;
+      --text-main: #EDE7FF;
+      --text-muted: #B9AEE8;
+      --card-bg: rgba(30, 25, 55, 0.8);
+      --border-glow: rgba(108, 74, 182, 0.5);
+      --radius: 24px;
+      --radius-sm: 14px;
+      --shadow: 0 15px 40px rgba(0,0,0,0.7);
+      --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: radial-gradient(circle at 20% 0%, #1E1740, var(--bg-space) 70%);
+      color: var(--text-main);
+      line-height: 1.7;
+      min-height: 100vh;
+      padding: 0 20px;
+    }
+
+    /* 主容器 */
+    .universe-wrapper {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 20px 0 60px;
+    }
+
+    /* 页眉品牌区 */
+    .site-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 0 10px;
+      border-bottom: 1px solid rgba(108, 74, 182, 0.3);
+      margin-bottom: 40px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-icon {
+      font-size: 2.5rem;
+      filter: drop-shadow(0 0 6px var(--primary));
+    }
+
+    .brand h2 {
+      font-size: 2rem;
+      letter-spacing: 2px;
+      background: linear-gradient(135deg, #E7C6FF, #9F7AEA);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 700;
+    }
+
+    .starlink-nav {
+      display: flex;
+      gap: 30px;
+      font-size: 1.05rem;
+    }
+
+    .starlink-nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 500;
+      transition: 0.2s;
+      padding: 6px 0;
+      border-bottom: 2px solid transparent;
+    }
+
+    .starlink-nav a:hover {
+      color: var(--secondary);
+      border-bottom-color: var(--secondary);
+    }
+
+    /* 首屏 (hero) 区 */
+    .hero-planet {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 50px 40px;
+      margin: 30px 0 60px;
+      background-image: radial-gradient(circle at 90% 20%, rgba(59, 201, 219, 0.15), transparent 40%), 
+                        radial-gradient(circle at 10% 80%, rgba(108, 74, 182, 0.3), transparent 50%);
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-planet::after {
+      content: "🪐";
+      position: absolute;
+      font-size: 10rem;
+      right: -15px;
+      bottom: -30px;
+      opacity: 0.06;
+      transform: rotate(15deg);
+      pointer-events: none;
+    }
+
+    .hero-title {
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 20px;
+      background: linear-gradient(to right, #FFD6A5, #FF8C69, #C0A0FF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      font-size: 1.3rem;
+      max-width: 700px;
+      color: var(--text-muted);
+      margin-bottom: 30px;
+      border-left: 4px solid var(--secondary);
+      padding-left: 22px;
+    }
+
+    .btn-explore {
+      background: linear-gradient(135deg, var(--primary), var(--primary-deep));
+      color: white;
+      font-weight: 600;
+      border: none;
+      padding: 14px 32px;
+      border-radius: 60px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(108, 74, 182, 0.5);
+      transition: 0.3s;
+      display: inline-block;
+      text-decoration: none;
+    }
+
+    .btn-explore:hover {
+      transform: translateY(-3px);
+      background: linear-gradient(135deg, #7C58D6, #5A37A3);
+      box-shadow: 0 12px 30px rgba(108, 74, 182, 0.8);
+    }
+
+    /* 核心内容区（分类卡片） */
+    .section-title {
+      font-size: 2.2rem;
+      margin: 50px 0 25px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .section-title span {
+      font-size: 2.5rem;
+    }
+
+    .planet-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 28px;
+      margin: 30px 0 50px;
+    }
+
+    .planet-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius);
+      padding: 28px 22px;
+      transition: 0.25s ease-in-out;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .planet-card:hover {
+      transform: translateY(-10px);
+      border-color: var(--border-glow);
+      background: var(--surface-light);
+    }
+
+    .card-icon {
+      font-size: 2.8rem;
+      margin-bottom: 18px;
+      display: block;
+    }
+
+    .planet-card h3 {
+      font-size: 1.7rem;
+      margin-bottom: 14px;
+      font-weight: 600;
+      color: #E3D5FF;
+    }
+
+    .planet-card p {
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      font-size: 1rem;
+    }
+
+    .card-link {
+      color: var(--secondary);
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .card-link::after {
+      content: "→";
+      transition: 0.2s;
+    }
+    .card-link:hover::after {
+      transform: translateX(5px);
+    }
+
+    /* 详细说明 / 步骤区块 */
+    .guide-deep {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 40px;
+      margin: 40px 0;
+      border: 1px solid #2D2647;
+    }
+
+    .guide-deep h3 {
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+      color: #DCCBFF;
+    }
+
+    .step-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      margin-top: 30px;
+    }
+
+    .step-item {
+      flex: 1 1 200px;
+      background: rgba(108, 74, 182, 0.1);
+      padding: 20px;
+      border-radius: var(--radius-sm);
+      border-left: 4px solid var(--accent);
+    }
+
+    .step-item strong {
+      font-size: 1.3rem;
+      color: var(--secondary);
+    }
+
+    /* 注意事项 / 常见问题 */
+    .faq-block {
+      display: grid;
+      gap: 15px;
+      margin: 30px 0;
+    }
+
+    .faq-item {
+      background: rgba(20, 16, 40, 0.7);
+      border-radius: 16px;
+      padding: 18px 24px;
+    }
+
+    .faq-question {
+      font-weight: 600;
+      font-size: 1.2rem;
+      display: flex;
+      gap: 10px;
+      color: #E8D7FF;
+    }
+
+    .faq-answer {
+      color: var(--text-muted);
+      padding-left: 30px;
+      margin-top: 8px;
+    }
+
+    /* 相关主题 */
+    .related-topics {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 20px 0;
+    }
+    .topic-tag {
+      background: #2A2245;
+      padding: 8px 18px;
+      border-radius: 40px;
+      color: #CBB9F5;
+      text-decoration: none;
+      border: 1px solid #3B2F60;
+      transition: 0.2s;
+    }
+    .topic-tag:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* 页脚 */
+    .site-footer {
+      margin-top: 60px;
+      text-align: center;
+      padding: 20px 0;
+      border-top: 1px solid #2E2650;
+      color: #8C7BB5;
+      font-size: 0.95rem;
+    }
+
+    /* 响应式 */
+    @media (max-width: 768px) {
+      .site-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+      }
+      .starlink-nav {
+        flex-wrap: wrap;
+        gap: 15px;
+      }
+      .hero-planet {
+        padding: 30px 20px;
+      }
+      .guide-deep {
+        padding: 25px;
+      }
+      .section-title {
+        font-size: 1.8rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 0 10px;
+      }
+      .brand h2 {
+        font-size: 1.6rem;
+      }
+      .hero-title {
+        font-size: 2.2rem;
+      }
+      .hero-sub {
+        font-size: 1.1rem;
+      }
+      .step-list {
+        flex-direction: column;
+      }
+    }
+  </style>
+  <!-- 指定广告代码 -->
+  <script type="text/javascript" src="https://cdn.bdwgg.com/mh.js"></script>
+</head>
+<body>
+<div class="universe-wrapper">
+  
+  <!-- 页眉 + 导航 -->
+  <header class="site-header">
+    <div class="brand">
+      <span class="brand-icon">🌌</span>
+      <h2>漫画星球</h2>
+    </div>
+    <nav class="starlink-nav">
+      <a href="#explore">探索星球</a>
+      <a href="#guide">漫游指南</a>
+      <a href="#faq">常见问题</a>
+      <a href="#community">同好交流</a>
+    </nav>
+  </header>
+
+  <!-- 首屏介绍 -->
+  <section class="hero-planet">
+    <h1 class="hero-title">漫画星球</h1>
+    <p class="hero-sub">在这里，每一个漫画宇宙都值得降落。从经典日漫到国漫新星，从独立创作到热门连载，漫画星球为你导航每一颗闪烁的漫画世界。</p>
+    <a href="#explore" class="btn-explore">进入星球核心 ⭐</a>
+  </section>
+
+  <!-- 核心内容区：四大分类卡片 -->
+  <section id="explore">
+    <h2 class="section-title"><span>🪐</span> 星球漫游指南</h2>
+    <div class="planet-grid">
+      <article class="planet-card">
+        <span class="card-icon">🔥</span>
+        <h3>热门连载</h3>
+        <p>当前星域最受关注的漫画作品，热血、悬疑、治愈……实时追踪人气榜单，快速定位你感兴趣的连载。</p>
+        <a href="#" class="card-link">查看热榜</a>
+      </article>
+      <article class="planet-card">
+        <span class="card-icon">🎭</span>
+        <h3>经典档案馆</h3>
+        <p>跨越时间的经典漫画，承载一代人的回忆。复古画风与永不过时的剧情，值得反复品读。</p>
+        <a href="#" class="card-link">浏览档案馆</a>
+      </article>
+      <article class="planet-card">
+        <span class="card-icon">✨</span>
+        <h3>独立新星</h3>
+        <p>发掘独立漫画家的奇思妙想，风格独特的短篇、实验性作品，在漫画星球找到它们的第一批读者。</p>
+        <a href="#" class="card-link">探索新星</a>
+      </article>
+      <article class="planet-card">
+        <span class="card-icon">💬</span>
+        <h3>深度解读</h3>
+        <p>剧情分析、角色解剖、作者访谈……不止看漫画，更读懂漫画背后的隐喻与创作故事。</p>
+        <a href="#" class="card-link">阅读解读</a>
+      </article>
+    </div>
+  </section>
+
+  <!-- 详细说明：如何玩转漫画星球 -->
+  <section class="guide-deep" id="guide">
+    <h3>🧭 漫画星球漫游手册</h3>
+    <p>无论你是萌新还是资深漫迷，通过下面四个步骤可以快速融入星球社区，找到属于自己的漫画世界。</p>
+    <div class="step-list">
+      <div class="step-item">
+        <strong>① 探索星图</strong>
+        <p>根据喜好选择类型标签，或通过星球热搜发现当下热门。每个卡片都附有内容简介与适合人群。</p>
+      </div>
+      <div class="step-item">
+        <strong>② 加入轨道</strong>
+        <p>收藏喜欢的漫画，创建个人阅读列表。系统会根据你的阅读轨迹推荐相似星球。</p>
+      </div>
+      <div class="step-item">
+        <strong>③ 参与共振</strong>
+        <p>在每部漫画的讨论区发布短评，与其他漫迷交换看法。这里没有对错，只有不同视角。</p>
+      </div>
+      <div class="step-item">
+        <strong>④ 创造引力</strong>
+        <p>如果你是创作者，可以上传自己的短篇或连载，让星球居民成为你的第一批读者。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 常见问题 FAQ -->
+  <section id="faq">
+    <h2 class="section-title"><span>❓</span> 星球居民常问</h2>
+    <div class="faq-block">
+      <div class="faq-item">
+        <div class="faq-question">📘 漫画星球是正版阅读平台吗？</div>
+        <div class="faq-answer">漫画星球是综合性漫画信息与社区平台，提供作品索引、讨论和部分授权作品的阅读入口。具体版权状态会在每个作品页标明。</p>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">🖌️ 我能在这里发布自己的漫画吗？</div>
+        <div class="faq-answer">可以。注册创作者账号后，在“创作中心”上传原创漫画，审核通过后即可展示在星球新星区，并接受读者收藏与评论。</p>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">🌐 是否有手机端app？</div>
+        <div class="faq-answer">目前以响应式网页为主，手机浏览器直接访问即可获得完整体验。未来会推出桌面及移动应用，敬请关注。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 相关主题标签 -->
+  <section>
+    <h2 class="section-title"><span>🌠</span> 你可能也喜欢</h2>
+    <div class="related-topics">
+      <a href="#" class="topic-tag"># 少年热血</a>
+      <a href="#" class="topic-tag"># 科幻漫画</a>
+      <a href="#" class="topic-tag"># 治愈系</a>
+      <a href="#" class="topic-tag"># 悬疑推理</a>
+      <a href="#" class="topic-tag"># 国漫之光</a>
+      <a href="#" class="topic-tag"># 漫画家</a>
+      <a href="#" class="topic-tag"># 漫画奖</a>
+    </div>
+  </section>
+
+  <!-- 社区氛围区块 -->
+  <section id="community" style="margin-top: 40px;">
+    <div style="background: #1D1733; border-radius: 28px; padding: 30px; text-align: center; border: 1px solid #443A6A;">
+      <h3 style="font-size: 2rem; margin-bottom: 15px;">👥 加入星球居民委员会</h3>
+      <p style="max-width: 600px; margin: 0 auto 25px; color: var(--text-muted);">每周漫画共读、主题讨论、创作接龙。漫画星球不是孤岛，而是一群人的精神原野。</p>
+      <a href="#" class="btn-explore" style="background: var(--secondary); background: linear-gradient(145deg, #FF9F7C, #E06F4E);"> 参与讨论</a>
+    </div>
+  </section>
+
+  <!-- 页脚 -->
+  <footer class="site-footer">
+    <p>🪐 漫画星球 · 让有趣的漫画灵魂相遇</p>
+    <p style="margin-top: 8px; font-size: 0.85rem; opacity: 0.7;">© 2025 漫画星球 · 所有漫画版权归原作者所有</p>
+  </footer>
+</div>
+</body>
+      </html>
